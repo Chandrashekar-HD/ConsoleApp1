@@ -6,6 +6,6 @@
     }
     public static void Main(string[] args)
     {
-        Addition obj = new Addition(1, 2);
+        Addition obj = new Addition(1, 2, 3);
     }
 }
