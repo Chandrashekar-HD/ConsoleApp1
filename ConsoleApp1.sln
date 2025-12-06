@@ -8,6 +8,7 @@ EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{B07EF659-6429-466E-BB78-72A55FF70778}"
 	ProjectSection(SolutionItems) = preProject
 		buildspec.yml = buildspec.yml
+		..\..\..\..\..\Personal\Interview Preparation\Dockerfile = ..\..\..\..\..\Personal\Interview Preparation\Dockerfile
 	EndProjectSection
 EndProject
 Global

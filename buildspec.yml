@@ -1,27 +1,25 @@
 version: 0.2
 
+env:
+  variables:
+    IMAGE_REPO_NAME: consoleapp1
+    IMAGE_TAG: latest
+
 phases:
   pre_build:
     commands:
       - echo Logging in to Amazon ECR...
       - aws --version
-      - REPOSITORY_URI=xxxxxxxxxxxx.dkr.ecr.us-east-1.amazonaws.com/sample-dotnet-app
-      - aws ecr get-login-password --region us-east-1 \
-        | docker login --username AWS --password-stdin $REPOSITORY_URI
-
+      - aws ecr get-login-password --region $AWS_DEFAULT_REGION | docker login --username AWS --password-stdin 475462778860.dkr.ecr.ap-south-1.amazonaws.com/chd.dkr.ecr.$AWS_DEFAULT_REGION.amazonaws.com
   build:
     commands:
-      - echo Build started...
-      - dotnet restore
-      - dotnet build -c Release
-      - echo Building Docker image...
-      - docker build -t sample-dotnet-app .
-      - docker tag sample-dotnet-app:latest $REPOSITORY_URI:latest
-
+      - echo Building the Docker image...
+      - docker build -t $IMAGE_REPO_NAME .
+      - docker tag $IMAGE_REPO_NAME:$IMAGE_TAG 475462778860.dkr.ecr.ap-south-1.amazonaws.com/chd.dkr.ecr.$AWS_DEFAULT_REGION.amazonaws.com/$IMAGE_REPO_NAME:$IMAGE_TAG
   post_build:
     commands:
-      - echo Pushing Docker image...
-      - docker push $REPOSITORY_URI:latest
+      - echo Pushing the image to ECR...
+      - docker push 475462778860.dkr.ecr.ap-south-1.amazonaws.com/chd.dkr.ecr.$AWS_DEFAULT_REGION.amazonaws.com/$IMAGE_REPO_NAME:$IMAGE_TAG
 artifacts:
   files:
-    - "**/*"
+    - '**/*'
