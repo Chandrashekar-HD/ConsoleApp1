@@ -10,16 +10,23 @@ phases:
     commands:
       - echo Logging in to Amazon ECR...
       - aws --version
-      - aws ecr get-login-password --region $AWS_DEFAULT_REGION | docker login --username AWS --password-stdin 475462778860.dkr.ecr.ap-south-1.amazonaws.com/chd.dkr.ecr.$AWS_DEFAULT_REGION.amazonaws.com
+      - aws ecr get-login-password --region $AWS_DEFAULT_REGION \
+        | docker login --username AWS --password-stdin 475462778860.dkr.ecr.ap-south-1.amazonaws.com
+
   build:
     commands:
       - echo Building the Docker image...
       - docker build -t $IMAGE_REPO_NAME .
-      - docker tag $IMAGE_REPO_NAME:$IMAGE_TAG 475462778860.dkr.ecr.ap-south-1.amazonaws.com/chd.dkr.ecr.$AWS_DEFAULT_REGION.amazonaws.com/$IMAGE_REPO_NAME:$IMAGE_TAG
+
+      - echo Tagging the Docker image...
+      - docker tag $IMAGE_REPO_NAME:$IMAGE_TAG \
+        475462778860.dkr.ecr.ap-south-1.amazonaws.com/chd:$IMAGE_TAG
+
   post_build:
     commands:
       - echo Pushing the image to ECR...
-      - docker push 475462778860.dkr.ecr.ap-south-1.amazonaws.com/chd.dkr.ecr.$AWS_DEFAULT_REGION.amazonaws.com/$IMAGE_REPO_NAME:$IMAGE_TAG
+      - docker push 475462778860.dkr.ecr.ap-south-1.amazonaws.com/chd:$IMAGE_TAG
+
 artifacts:
   files:
     - '**/*'
