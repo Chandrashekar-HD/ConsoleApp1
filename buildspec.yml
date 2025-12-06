@@ -1,0 +1,27 @@
+version: 0.2
+
+phases:
+  pre_build:
+    commands:
+      - echo Logging in to Amazon ECR...
+      - aws --version
+      - REPOSITORY_URI=xxxxxxxxxxxx.dkr.ecr.us-east-1.amazonaws.com/sample-dotnet-app
+      - aws ecr get-login-password --region us-east-1 \
+        | docker login --username AWS --password-stdin $REPOSITORY_URI
+
+  build:
+    commands:
+      - echo Build started...
+      - dotnet restore
+      - dotnet build -c Release
+      - echo Building Docker image...
+      - docker build -t sample-dotnet-app .
+      - docker tag sample-dotnet-app:latest $REPOSITORY_URI:latest
+
+  post_build:
+    commands:
+      - echo Pushing Docker image...
+      - docker push $REPOSITORY_URI:latest
+artifacts:
+  files:
+    - "**/*"
